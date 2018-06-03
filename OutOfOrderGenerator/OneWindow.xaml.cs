@@ -323,6 +323,7 @@ namespace OutOfOrderGenerator
         {
             while (true)
             {
+                Thread.Sleep(1);
                 model.NowTime = GetNowTime();
             }
         }
@@ -330,7 +331,7 @@ namespace OutOfOrderGenerator
         //窗体加载完成后
         private void g1_Loaded(object sender, RoutedEventArgs e)
         {
-            if(model != null)
+            if (model != null)
             {
                 Thread t = new Thread(UpdateTime) { IsBackground = true };
                 t.Start();
