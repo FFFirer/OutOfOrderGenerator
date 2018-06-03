@@ -314,7 +314,20 @@ namespace OutOfOrderGenerator
         //刷新界面
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
-            model = new OneViewModel();
+            //model = new OneViewModel();
+            txtBuckleWeight.Clear();
+            txtCarNum.Clear();
+            txtCertificateNum.Clear();
+            txtCollectName.Clear();
+            txtGrainWeight.Clear();
+            txtGrossWeight.Clear();
+            txtLineItemsNum.Clear();
+            txtMaterialCode.Clear();
+            txtMaterialName.Clear();
+            txtNetWeight.Clear();
+            txtNum.Clear();
+            txtProviderName.Clear();
+            txtTare.Clear();
             lblInfo.Content = "提示信息";
         }
 
