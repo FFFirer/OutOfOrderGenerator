@@ -55,7 +55,7 @@ namespace OutOfOrderGenerator
             txtProviderName.SetBinding(TextBox.TextProperty, new Binding("ProviderName") { Source = model });
             txtTare.SetBinding(TextBox.TextProperty, new Binding("Tare") { Source = model });
             SavePath = ConfigurationManager.AppSettings["SavePath"];
-            if (SavePath == "")
+            if (SavePath == "" || !Directory.Exists(SavePath))
             {
                 SavePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
             }
