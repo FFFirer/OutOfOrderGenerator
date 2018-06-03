@@ -22,6 +22,10 @@ namespace OutOfOrderGenerator
         public MainWindow()
         {
             InitializeComponent();
+            this.Hide();
+            OneWindow ow = new OneWindow();
+            ow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            ow.Show();
         }
     }
 }
