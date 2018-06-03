@@ -21,7 +21,7 @@
             <Setter Property="Padding" Value="3"/>
         </Style>
     </Window.Resources>
-    <Grid Name="g1" DataContext="model">
+    <Grid Name="g1" DataContext="model" Loaded="g1_Loaded">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
@@ -65,7 +65,7 @@
         <Label Grid.Row="5" Grid.Column="4" Content="收方"/>
         <Label Grid.Row="6" Grid.Column="4" Content="皮重(kg)"/>
         <Label Grid.Row="7" Grid.Column="4" Content="扣重(%)"/>
-        <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Content="     年     月     日"/>
+        <!--<Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="3" Content="     年     月     日"/>-->
         <Label Grid.Row="9" Grid.ColumnSpan="4" Name="lblFolderPath" HorizontalAlignment="Left"/>
         <Label Grid.Row="10" Grid.ColumnSpan="11" Content="提示信息" Name="lblInfo" FontSize="10"/>
         <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Name="txtNum"/>
@@ -82,8 +82,12 @@
         <TextBox Grid.Row="7" Grid.Column="5" Grid.ColumnSpan="6" Name="txtBuckleWeight"/>
         <TextBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="10" Name="txtNetWeight"/>
 
-        <Button Grid.Row="9" Grid.Column="6" Content="选择保存文件夹" Name="btnSelectSavePath" Click="btnSelectSavePath_Click"/>
-        <Button Grid.Row="9" Grid.Column="5" Content="测试" Click="Button_Click"/>
-        <Button Grid.Row="9" Grid.Column="7" Content="保存" Name="btnSave" Click="btnSave_Click"/>
+        <Grid Grid.Row="9" Grid.ColumnSpan="11">
+            <Button Padding="3" Margin="20,0,0,0" Content="选择保存文件夹" Name="btnSelectSavePath" Click="btnSelectSavePath_Click" HorizontalAlignment="Left"/>
+            <Button Padding="3" Margin="120,0,0,0" Content="打开文件夹" Name="btnOpenSavePath" Click="btnOpenSavePath_Click" HorizontalAlignment="Left"/>
+            <Button Padding="3" Margin="200,0,0,0" Content="新建" Name="btnCreate" Click="btnCreate_Click" HorizontalAlignment="Left"/>
+            <Button Content="测试" Visibility="Collapsed" Click="Button_Click"/>
+            <Button Padding="3" MinWidth="100" Content="保存" Name="btnSave" Click="btnSave_Click" HorizontalAlignment="Right"/>
+        </Grid>
     </Grid>
 </Window>

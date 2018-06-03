@@ -16,6 +16,17 @@ namespace OutOfOrderGenerator.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
             }
         }
+        private string nowTime { get; set; }
+        public string NowTime
+        {
+            get { return nowTime; }
+            set
+            {
+                if(nowTime == value) { return; }
+                nowTime = value;
+                Notify("nowTime");
+            }
+        }
 
         //计量单号
         private string num { get; set; }

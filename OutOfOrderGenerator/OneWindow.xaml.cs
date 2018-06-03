@@ -20,6 +20,8 @@ using NPOI.XSSF.UserModel;
 using System.IO;
 using ICSharpCode.SharpZipLib;
 using NPOI.HSSF.Util;
+using System.Diagnostics;
+using System.Threading;
 
 namespace OutOfOrderGenerator
 {
@@ -37,6 +39,8 @@ namespace OutOfOrderGenerator
             InitializeComponent();
             this.Closing += OneWindow_Closing;
             model = new OneViewModel();
+            
+            lblTime.SetBinding(Label.ContentProperty, new Binding("NowTime") { Source = model });
             txtBuckleWeight.SetBinding(TextBox.TextProperty, new Binding("BuckleWeight") { Source = model });
             txtCarNum.SetBinding(TextBox.TextProperty, new Binding("CarNum") { Source = model });
             txtCertificateNum.SetBinding(TextBox.TextProperty, new Binding("CertificateNum") { Source = model });
@@ -285,6 +289,7 @@ namespace OutOfOrderGenerator
             }
         }
 
+        //保存文件
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             string filePath = string.Format("{0}\\{1}.xls", SavePath, GetNowTime());
@@ -294,6 +299,41 @@ namespace OutOfOrderGenerator
                 lblInfo.Content = "正在保存中...";
                 Write2Excel(filePath);
                 lblInfo.Content = "保存完成！";
+            }
+        }
+
+        //打开保存路径
+        private void btnOpenSavePath_Click(object sender, RoutedEventArgs e)
+        {
+            Process p = new Process();
+            p.StartInfo.FileName = "explorer.exe";
+            p.StartInfo.Arguments = SavePath;
+            p.Start();
+        }
+
+        //刷新界面
+        private void btnCreate_Click(object sender, RoutedEventArgs e)
+        {
+            model = new OneViewModel();
+            lblInfo.Content = "提示信息";
+        }
+
+        //更新时间
+        public void UpdateTime()
+        {
+            while (true)
+            {
+                model.NowTime = GetNowTime();
+            }
+        }
+
+        //窗体加载完成后
+        private void g1_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(model != null)
+            {
+                Thread t = new Thread(UpdateTime) { IsBackground = true };
+                t.Start();
             }
         }
     }
