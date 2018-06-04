@@ -34,6 +34,8 @@ namespace OutOfOrderGenerator
         public OneViewModel model { get; set; }
         //保存路径
         public string SavePath { get; set; }
+        //上次退出时使用的公司名字
+        public string GongsiName { get; set; }
         public OneWindow()
         {
             InitializeComponent();
@@ -55,16 +57,23 @@ namespace OutOfOrderGenerator
             txtProviderName.SetBinding(TextBox.TextProperty, new Binding("ProviderName") { Source = model });
             txtTare.SetBinding(TextBox.TextProperty, new Binding("Tare") { Source = model });
             SavePath = ConfigurationManager.AppSettings["SavePath"];
+            GongsiName = ConfigurationManager.AppSettings["GongsiName"];
             if (SavePath == "" || !Directory.Exists(SavePath))
             {
                 SavePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
             }
             this.Title = string.Format("Excel生成器————保存在 {0}", SavePath);
+            if(GongsiName != null && GongsiName != "")
+            {
+                lblGongsiName.Content = GongsiName;
+            }
         }
 
         //窗体关闭事件
         private void OneWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //保存关闭前的公司名字
+            Save2Config("GongsiName", lblGongsiName.Content.ToString());
             Application.Current.Shutdown();
         }
         
@@ -83,7 +92,7 @@ namespace OutOfOrderGenerator
             MessageBox.Show(msg);
         }
         
-        //但会当前日期时间的字符串
+        //返回当前日期时间的字符串
         public string GetNowTime()
         {
             string time = string.Empty;
@@ -121,15 +130,25 @@ namespace OutOfOrderGenerator
             SavePath = f_dialog.SelectedPath.Trim();
             this.Title = string.Format("Excel生成器————保存在 {0}", SavePath);
             //lblFolderPath.Content = SavePath;
-            SavePath2Config();
+            Save2Config("SavePath", SavePath);
         }
         
         //保存进配置
-        private void SavePath2Config()
+        private void Save2Config(string propname, string value)
         {
-            Configuration cfg = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            cfg.AppSettings.Settings["SavePath"].Value = SavePath;
-            cfg.Save();
+            //如果没有就添加,有就修改
+            if (!ConfigurationManager.AppSettings.AllKeys.Contains(propname))
+            {
+                Configuration con = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                con.AppSettings.Settings.Add(propname, value);
+                con.Save();
+            }
+            else
+            {
+                Configuration cfg = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                cfg.AppSettings.Settings[propname].Value = value;
+                cfg.Save();
+            }
         }
 
         //写入Excel文件
@@ -214,7 +233,7 @@ namespace OutOfOrderGenerator
             int rowCount = 18, colCount = 11;
             string[,] data =
             {
-                {"山西杏花村汾酒厂股份有限公司","","","","","","","","","","" },
+                {lblGongsiName.Content.ToString(),"","","","","","","","","","" },
                 {"","","","","","","","","","","" },
                 {"","","","","","","","","","","" },
                 {"","","","计量单","","","","",GetNowTime(),"","" },
@@ -350,5 +369,19 @@ namespace OutOfOrderGenerator
                 t.Start();
             }
         }
+
+        //设置公司名字
+        private void btnSet_Click(object sender, RoutedEventArgs e)
+        {
+            SettingWindow setting = new SettingWindow()
+            {
+                Selected = this.lblGongsiName.Content.ToString(),
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            setting.ShowDialog();
+            lblGongsiName.Content = setting.Selected;
+        }
+        
     }
 }
